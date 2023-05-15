@@ -1,0 +1,34 @@
+---
+server:
+  port: 3005
+
+spring:
+  profiles:
+    active: dev
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: ${env.DATABASE_USERNAME}
+    url: ${env.DATABASE_URL}
+    password: ${env.DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      dialect: org.hibernate.dialect.SQLServer2016Dialect
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: 'true'
+    show-sql: 'true'
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${env.OAUTH2_GOOGLE_CLIENT_ID}
+            clientSecret: ${env.OAUTH2_GOOGLE_CLIENT_SECRET}
+            scope: email,profile
