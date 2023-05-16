@@ -1,11 +1,10 @@
 package com.wolfalone.gamecdbackend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "Users")
@@ -13,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "account")
 public class Users {
 
     @Id
@@ -25,6 +25,7 @@ public class Users {
     @Column(name = "address")
     private String address;
 
-    //    @OneToOne(mappedBy = "user")
-    //    private Account account;
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    private Account account;
 }

@@ -1,11 +1,16 @@
 package com.wolfalone.gamecdbackend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Accounts",
@@ -14,11 +19,12 @@ import lombok.NoArgsConstructor;
                 columnNames = "email"
         )
 )
+@ToString(exclude = "user")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class Account  implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,14 +41,53 @@ public class Account {
     private int status;
     @Column
     private int role;
+
+    public String getRole() {
+        String _role = "GUEST";
+        if(this.role == 1) {
+            _role = "ADMIN";
+        } else if(this.role == 0) {
+            _role = "USER";
+        }
+        return _role;
+    }
     @OneToOne(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
             optional = false
     )
     @JoinColumn(
             name = "userId",
             referencedColumnName =  "id"
     )
+    @JsonManagedReference
     private Users user;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.getRole()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

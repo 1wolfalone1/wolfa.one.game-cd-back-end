@@ -19,9 +19,9 @@ public class Oauth2SuccessfulHandler implements AuthenticationSuccessHandler {
     private Logger Logg = LoggerFactory.getLogger(Slf4j.class);
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        Logg.info(authentication.getPrincipal().getClass().toString());
-        CustomOauth2User user = (CustomOauth2User) authentication.getPrincipal();
-        request.setAttribute("a", user);
+//        Logg.info(authentication.getPrincipal().getClass().toString());
+//        CustomOauth2User user = (CustomOauth2User) authentication.getPrincipal();
+//        request.setAttribute("a", user);
 //        request.getRequestDispatcher("/api/v1/authentication/send").forward(request, response);
     }
 }
