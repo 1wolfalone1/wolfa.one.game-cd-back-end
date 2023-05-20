@@ -19,7 +19,7 @@ import java.util.List;
                 columnNames = "email"
         )
 )
-@ToString(exclude = "user")
+@ToString
 @Data
 @Builder
 @AllArgsConstructor
@@ -41,6 +41,9 @@ public class Account  implements UserDetails {
     private int status;
     @Column
     private int role;
+
+    @Column
+    private String verifiedEmailCode;
 
     public String getRole() {
         String _role = "GUEST";

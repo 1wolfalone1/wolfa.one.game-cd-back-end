@@ -22,8 +22,20 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        format_sql: 'true'
-    show-sql: 'true'
+        format_sql: true
+    show-sql: true
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+    host: smtp.gmail.com
+    username: ${env.EMAIL_USERNAME}
+    password: ${env.EMAIL_PASSWORD}
+    port: 587
+
 #  security:
 #    oauth2:
 #      client:

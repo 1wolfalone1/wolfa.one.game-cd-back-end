@@ -28,6 +28,7 @@ public class JwtService {
 
 
     private Claims extractAllClaims(String token){
+
         if(token.trim() == "[object Object]") {
             System.out.println(token +  " 11111111111111111111111111111111111");
         } else {
@@ -55,7 +56,7 @@ public class JwtService {
             Map<String, Object> extractClaim,
             UserDetails userDetails
     ) {
-        return Jwts
+        String token = Jwts
                 .builder()
                 .setClaims(extractClaim)
                 .setSubject(userDetails.getUsername())
@@ -63,6 +64,7 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_DURATION))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
+        return token;
 
     }
 

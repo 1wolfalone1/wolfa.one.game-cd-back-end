@@ -4,12 +4,14 @@ package com.wolfalone.gamecdbackend.controller;
 import com.wolfalone.gamecdbackend.dto.Oauth2Reponse;
 import com.wolfalone.gamecdbackend.dto.Oauth2Token;
 import com.wolfalone.gamecdbackend.dto.UserDTO;
+import com.wolfalone.gamecdbackend.dto.UserRegistrationDTO;
 import com.wolfalone.gamecdbackend.entity.Account;
 import com.wolfalone.gamecdbackend.entity.Users;
 import com.wolfalone.gamecdbackend.mapper.UserMapper;
 import com.wolfalone.gamecdbackend.repository.AccountRepo;
 import com.wolfalone.gamecdbackend.repository.UserRepo;
 import com.wolfalone.gamecdbackend.service.AccountService;
+import com.wolfalone.gamecdbackend.service.EmailService;
 import com.wolfalone.gamecdbackend.service.iml.JwtService;
 import com.wolfalone.gamecdbackend.util.MyLogger;
 import jakarta.servlet.http.Cookie;
@@ -17,14 +19,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.*;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.swing.text.html.Option;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,9 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthenticatonController {
 
+
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private MyLogger log;
     @Autowired
@@ -63,39 +67,62 @@ public class AuthenticatonController {
         return ResponseEntity.ok("123123");
     }
 
+    @PostMapping("/auth/login")
+    public ResponseEntity<UserDTO> loginByEmailPassword(@RequestBody UserDTO userAuthentication) {
+        try {
+            UserDTO responseUser = accountService.authenticate(userAuthentication);
+            if (responseUser != null) {
+
+                return ResponseEntity.ok(responseUser);
+            } else {
+
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+            }
+        } catch (Exception e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("errorServer", "Some thing wrong");
+            log.log().error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(headers).body(null);
+        }
+
+    }
+
     @PostMapping("/oauth2/google")
-    public ResponseEntity<Object> a(@RequestBody Oauth2Token a,HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<UserDTO> a(@RequestBody Oauth2Token payload, HttpServletRequest request,
+                                     HttpServletResponse response) {
         RestTemplate _request = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(a.access_token());
+        headers.setBearerAuth(payload.access_token());
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
-        ResponseEntity<Oauth2Reponse> k = _request.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, entity, Oauth2Reponse.class);
-        System.out.println(a);
-        System.out.println(k.getBody());
-        Oauth2Reponse _response = k.getBody();
-        if(request.getCookies() != null) {
-            Arrays.stream(request.getCookies()).forEach(c -> {
-                System.out.println(c + "1111111111111111111111111");
-            });
-        } else  {
-            String tmp = request.getHeader("Authorization");
-            if(request.getHeader("Authorization") == "[object Object]") {
-                log.log().info(tmp +"11111111111111111111111111111");
-            } else {
-                log.log().info(tmp +"22222222222222222222222222222222222222");
+        ResponseEntity<Oauth2Reponse> oauth2UserResource = _request.exchange("https://www" +
+                ".googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, entity, Oauth2Reponse.class);
+        Oauth2Reponse _response = oauth2UserResource.getBody();
 
-            }
-        }
         Account acc = accountService.getAccountByEmail(_response.email());
-        String token = "false";
+        UserDTO user = null;
+        String token = "";
         if (acc != null) {
             token = jwtService.generateToken(acc);
+            acc.setTokenId(token);
+            user = userMapper.toDTO(acc.getUser(), acc);
         }
-        Cookie cookie = new Cookie("Authorization", token);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        response.addCookie(cookie);
-        System.out.println(token);
-        return ResponseEntity.ok(token);
+
+        return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity<String> registrationAccount(@RequestBody UserRegistrationDTO payload) {
+        Optional<UserDTO> user = accountService.registerNewAccount(payload);
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Duplicated Email!");
+        }
+        System.out.println(user + "user ne");
+        return ResponseEntity.ok(user.get().email());
+    }
+
+    @GetMapping("/verifyEmail")
+    public ResponseEntity<UserDTO> verifyEmail(@Param("email") String email, @Param("code") String code) {
+        Optional<UserDTO> user = accountService.verifyEmail(email, code);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null));
     }
 }
