@@ -1,9 +1,12 @@
 package com.wolfalone.gamecdbackend.service.iml;
 
+import com.wolfalone.gamecdbackend.event.SendEmailEvent;
 import com.wolfalone.gamecdbackend.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,4 +31,7 @@ public class EmailServiceIml implements EmailService {
             throw e;
         }
     }
+
+
+
 }

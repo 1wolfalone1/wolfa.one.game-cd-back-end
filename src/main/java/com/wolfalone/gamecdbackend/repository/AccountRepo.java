@@ -19,8 +19,8 @@ public interface AccountRepo extends JpaRepository<Account, Integer> {
     Account findByEmailAndPassword(String email, String password);
     Optional<Account> findByEmail(String email);
 
-    @Query(value = "select * from accounts a where email = ? and (status = 0)",
-            nativeQuery = true)
+    @Query(value = "select * from accounts a where email = ? and (status = 0)", nativeQuery =
+            true)
     Account countByEmailAndPending(String email);
 
     Account findByEmailAndVerifiedEmailCodeAndStatus(String email, String code, int status);

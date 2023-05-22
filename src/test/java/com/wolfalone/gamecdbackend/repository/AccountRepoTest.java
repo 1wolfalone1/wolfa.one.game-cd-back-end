@@ -16,7 +16,7 @@ class AccountRepoTest {
 
     @Test
     public void fetchAll() {
-        List<Account> list = accountRepo.findAll();
-        System.out.println(list.get(0).getUser());
+        long a = accountRepo.countByEmailAndActive("");
+        System.out.println(a);
     }
 }

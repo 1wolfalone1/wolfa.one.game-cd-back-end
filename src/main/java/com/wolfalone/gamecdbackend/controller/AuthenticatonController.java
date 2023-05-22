@@ -105,6 +105,11 @@ public class AuthenticatonController {
             token = jwtService.generateToken(acc);
             acc.setTokenId(token);
             user = userMapper.toDTO(acc.getUser(), acc);
+        } else {
+           Account newAccount =  accountService.registerNewAccountByOauth2(_response);
+            token = jwtService.generateToken(newAccount);
+            newAccount.setTokenId(token);
+            user = userMapper.toDTO(newAccount.getUser(), newAccount);
         }
 
         return ResponseEntity.ok(user);

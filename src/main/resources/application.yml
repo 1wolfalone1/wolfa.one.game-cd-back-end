@@ -12,16 +12,16 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    driver-class-name: org.postgresql.Driver
     username: ${env.DATABASE_USERNAME}
     url: ${env.DATABASE_URL}
     password: ${env.DATABASE_PASSWORD}
   jpa:
     hibernate:
-      dialect: org.hibernate.dialect.SQLServer2016Dialect
       ddl-auto: update
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL81Dialect
         format_sql: true
     show-sql: true
   mail:

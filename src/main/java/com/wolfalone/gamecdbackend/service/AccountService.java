@@ -1,5 +1,6 @@
 package com.wolfalone.gamecdbackend.service;
 
+import com.wolfalone.gamecdbackend.dto.Oauth2Reponse;
 import com.wolfalone.gamecdbackend.dto.UserDTO;
 import com.wolfalone.gamecdbackend.dto.UserRegistrationDTO;
 import com.wolfalone.gamecdbackend.entity.Account;
@@ -21,4 +22,6 @@ public interface AccountService {
     Optional<UserDTO> registerNewAccount(UserRegistrationDTO payload);
 
     Optional<UserDTO> verifyEmail(String email, String code);
+
+    Account registerNewAccountByOauth2(Oauth2Reponse response);
 }
