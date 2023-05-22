@@ -124,7 +124,8 @@ public class AccountServiceIml implements AccountService {
             System.out.println(newAccount);
             Users user = userRepo.save(newAccount.getUser());
             newAccount.getUser().setId(user.getId());
-            emailService.sendSimpleEmail(newAccount.getEmail(), randomVerifyCode, "Verify Code");
+            eventHandle.sendEmail(newAccount.getEmail(), randomVerifyCode, "veirradfas");
+
             accountRepo.save(newAccount);
             UserDTO accDTO = userMapper.toDTO(newAccount.getUser(), newAccount);
             return Optional.of(accDTO);
