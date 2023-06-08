@@ -9,9 +9,7 @@ public class EventHandle {
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
 
-    /**
-     * Hành động bấm chuông cửa
-     */
+
     public void sendEmail(String email, String subject, String text) {
         // Phát ra một sự kiện DoorBellEvent
         // source (Nguồn phát ra) chính là class này

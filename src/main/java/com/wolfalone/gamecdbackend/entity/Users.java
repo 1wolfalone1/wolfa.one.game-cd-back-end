@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
-@Table(name = "Users")
+@Table(name = "tbl_users")
 @Data
 @Builder
 @AllArgsConstructor
@@ -24,6 +26,9 @@ public class Users {
     private String phone;
     @Column(name = "address")
     private String address;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
     @OneToOne(mappedBy = "user")
     @JsonBackReference

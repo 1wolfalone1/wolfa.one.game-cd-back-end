@@ -1,6 +1,7 @@
 package com.wolfalone.gamecdbackend.controller;
 
 
+import com.wolfalone.gamecdbackend.config.constant.ApiConstant;
 import com.wolfalone.gamecdbackend.dto.Oauth2Reponse;
 import com.wolfalone.gamecdbackend.dto.Oauth2Token;
 import com.wolfalone.gamecdbackend.dto.UserDTO;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/authentication")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = ApiConstant.FRONT_END_URL, allowCredentials = "true")
 public class AuthenticatonController {
 
 
@@ -103,6 +104,7 @@ public class AuthenticatonController {
         String token = "";
         if (acc != null) {
             token = jwtService.generateToken(acc);
+            System.out.println(token + "      111111111111111111");
             acc.setTokenId(token);
             user = userMapper.toDTO(acc.getUser(), acc);
         } else {

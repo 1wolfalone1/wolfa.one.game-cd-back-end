@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "Accounts",
+@Table(name = "tbl_accounts",
         uniqueConstraints = @UniqueConstraint(
                 name = "email_id_unique",
                 columnNames = "email"
@@ -55,10 +55,11 @@ public class Account  implements UserDetails {
         return _role;
     }
     @OneToOne(
-            optional = false
+            optional = false,
+            cascade = CascadeType.ALL
     )
     @JoinColumn(
-            name = "userId",
+            name = "user_id",
             referencedColumnName =  "id"
     )
     @JsonManagedReference

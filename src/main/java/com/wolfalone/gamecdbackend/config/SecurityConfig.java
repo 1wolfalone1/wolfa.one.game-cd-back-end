@@ -26,7 +26,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000/"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3006"));
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/authentication/**",
                         "/auth/**", "/oauth/**", "/oauth2" +
-                        "/**", "/login").permitAll()
+                        "/**", "/login", "/api/v1/games/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

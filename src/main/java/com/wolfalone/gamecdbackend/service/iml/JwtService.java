@@ -30,10 +30,7 @@ public class JwtService {
     private Claims extractAllClaims(String token){
 
         if(token.trim() == "[object Object]") {
-            System.out.println(token +  " 11111111111111111111111111111111111");
         } else {
-            System.out.println(token +  " 22222222222222222222222222222");
-
         }
         return Jwts
                 .parserBuilder()

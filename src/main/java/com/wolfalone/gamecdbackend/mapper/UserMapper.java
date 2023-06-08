@@ -5,7 +5,6 @@ import com.wolfalone.gamecdbackend.entity.Account;
 import com.wolfalone.gamecdbackend.entity.Users;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "Spring")
 public interface UserMapper {

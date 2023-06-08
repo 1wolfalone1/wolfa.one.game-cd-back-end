@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Integer> {
-    @Query(value = "select count(*) from accounts a where email = ? and (status = 1)",
+    @Query(value = "select count(*) from tbl_accounts a where email = ? and (status = 1)",
             nativeQuery = true)
     long countByEmailAndActive(String email);
 
@@ -19,7 +19,7 @@ public interface AccountRepo extends JpaRepository<Account, Integer> {
     Account findByEmailAndPassword(String email, String password);
     Optional<Account> findByEmail(String email);
 
-    @Query(value = "select * from accounts a where email = ? and (status = 0)", nativeQuery =
+    @Query(value = "select * from tbl_accounts a where a.email = ? and (status = 0)", nativeQuery =
             true)
     Account countByEmailAndPending(String email);
 
