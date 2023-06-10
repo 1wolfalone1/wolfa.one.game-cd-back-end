@@ -1,5 +1,6 @@
 package com.wolfalone.gamecdbackend.service;
 
+import com.wolfalone.gamecdbackend.dto.FilterDataDTO;
 import com.wolfalone.gamecdbackend.dto.GameDetailsDTO;
 import com.wolfalone.gamecdbackend.dto.ListGamePagingDTO;
 import com.wolfalone.gamecdbackend.entity.Game;
@@ -12,4 +13,5 @@ import java.util.List;
 public interface GameService {
     ResponseEntity<?> getGameAndPaging(int page);
     ResponseEntity<?> getGameDetails(int id);
+    ResponseEntity<?> filterGame(FilterDataDTO filterDataDTO , int page);
 }

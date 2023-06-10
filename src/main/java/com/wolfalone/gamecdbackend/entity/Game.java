@@ -8,10 +8,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "tbl_game")
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

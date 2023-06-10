@@ -1,7 +1,8 @@
 ---
 server:
   port: 3005
-
+  tomcat:
+    relaxed-query-chars: [ '[',']' ]
 spring:
   profiles:
     active: dev
@@ -35,7 +36,6 @@ spring:
     username: ${env.EMAIL_USERNAME}
     password: ${env.EMAIL_PASSWORD}
     port: 587
-
 #  security:
 #    oauth2:
 #      client:

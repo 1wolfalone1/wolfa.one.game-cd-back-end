@@ -3,7 +3,6 @@ package com.wolfalone.gamecdbackend.service.iml;
 import com.wolfalone.gamecdbackend.config.constant.PagingConstant;
 import com.wolfalone.gamecdbackend.dto.*;
 import com.wolfalone.gamecdbackend.entity.Game;
-import com.wolfalone.gamecdbackend.mapper.CategoryMapper;
 import com.wolfalone.gamecdbackend.mapper.GameMapper;
 import com.wolfalone.gamecdbackend.repository.GameRepo;
 import com.wolfalone.gamecdbackend.service.CategoryService;
@@ -11,7 +10,6 @@ import com.wolfalone.gamecdbackend.service.GameService;
 import com.wolfalone.gamecdbackend.service.ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -40,10 +38,9 @@ public class GameServiceIml implements GameService {
 //        List<GameCardDTO> gameCardDTOList = gameMapper.toDTO(game)
         pageAble.getTotalPages();
         pageAble.getTotalElements();
-        List<GameCardDTO> gameCardDTOList = gameRepo.findAll(pageRequest).getContent().stream().map(game -> {
-            GameCardDTO gameCardDTO = gameMapper.toDTO(game, game.getImages().get(game.getImages().size() - 1).getImageUrl(), categoryService.mapListCateToDTO(game.getCategories()));
-            return gameCardDTO;
-        }).collect(Collectors.toList());
+        List<GameCardDTO> gameCardDTOList =
+                mapListGameEntityToGameDTO(gameRepo.findAll(pageRequest).getContent());
+
         ListGamePagingDTO list = new ListGamePagingDTO(pageAble.getTotalPages(), pageAble.getTotalElements(), gameCardDTOList);
         return ResponseEntity.ok(list);
     }
@@ -64,5 +61,43 @@ public class GameServiceIml implements GameService {
         }
     }
 
+    @Override
+    public ResponseEntity<?> filterGame(FilterDataDTO filterDataDTO, int page) {
+        PageRequest pageRequest = PageRequest.of(page - 1,
+                PagingConstant.PAGE_NUMBER);
+        Integer fromPrice = filterDataDTO.from();
+        Integer toPrice = filterDataDTO.to();
+        Integer categotyId = filterDataDTO.category();
+        int hasCategoryId = 1;
+        if (categotyId == 0) {
+            hasCategoryId = 0;
+        }
+        if (toPrice == null) {
+            toPrice = Integer.MAX_VALUE;
+        }
+        if(fromPrice == null) {
+            fromPrice = 0;
+        }
+        Page<Game> pageAble = gameRepo.filterByNameAndPriceRange(filterDataDTO.name(), fromPrice, toPrice,
+                hasCategoryId, categotyId, pageRequest);
+        List<Game> games = pageAble.getContent();
+
+        int totalPage = pageAble.getTotalPages();
+        long totalElement = pageAble.getTotalElements();
+        System.out.println(games +  "--[]--");
+        System.out.println(totalPage +  "--[]--");
+        System.out.println(totalElement +  "--[]--");
+        List<GameCardDTO> gameCardDTOList = mapListGameEntityToGameDTO(games);
+        ListGamePagingDTO listGamePagingDTO = new ListGamePagingDTO(totalPage
+                , totalElement, gameCardDTOList);
+        return ResponseEntity.ok(listGamePagingDTO);
+    }
+
+    public List<GameCardDTO> mapListGameEntityToGameDTO(List<Game> games) {
+        return games.stream().map(game -> {
+            GameCardDTO gameCardDTO = gameMapper.toDTO(game, game.getImages().get(game.getImages().size() - 1).getImageUrl(), categoryService.mapListCateToDTO(game.getCategories()));
+            return gameCardDTO;
+        }).collect(Collectors.toList());
+    }
 
 }

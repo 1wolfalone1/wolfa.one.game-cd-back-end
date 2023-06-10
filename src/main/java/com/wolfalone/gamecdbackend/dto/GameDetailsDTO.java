@@ -8,7 +8,7 @@ public record GameDetailsDTO(
         String name,
         int price,
         int quantity,
-        List<ImageDTO> imageDTOList,
-        List<CategoryDTO> categoryDTOList
+        List<ImageDTO> imageList,
+        List<CategoryDTO> categoryList
 ) {
 }
