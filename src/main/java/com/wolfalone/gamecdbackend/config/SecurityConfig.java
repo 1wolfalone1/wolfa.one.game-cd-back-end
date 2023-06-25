@@ -50,7 +50,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/authentication/**",
                         "/auth/**", "/oauth/**", "/oauth2" +
-                        "/**", "/login", "/api/v1/games/**", "/api/v1/category/**", "/api/v1/category").permitAll()
+                        "/**", "/login", "/api/v1/games/**", "/api/v1/category/**", "/api/v1" +
+                                "/category", "/").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
