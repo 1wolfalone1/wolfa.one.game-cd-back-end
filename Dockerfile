@@ -8,7 +8,7 @@ WORKDIR /app
 COPY ./target/game-cd-back-end-0.0.1-SNAPSHOT.jar /app
 
 # Exposing port 8080
-EXPOSE 3005
+EXPOSE 8080
 
 # Starting the application
 CMD ["java", "-jar", "game-cd-back-end-0.0.1-SNAPSHOT.jar"]
