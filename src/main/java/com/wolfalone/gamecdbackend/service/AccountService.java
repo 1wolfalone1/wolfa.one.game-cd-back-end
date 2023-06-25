@@ -4,7 +4,6 @@ import com.wolfalone.gamecdbackend.dto.Oauth2Reponse;
 import com.wolfalone.gamecdbackend.dto.UserDTO;
 import com.wolfalone.gamecdbackend.dto.UserRegistrationDTO;
 import com.wolfalone.gamecdbackend.entity.Account;
-import com.wolfalone.gamecdbackend.util.MyLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

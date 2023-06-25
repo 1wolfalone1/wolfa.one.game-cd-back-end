@@ -14,7 +14,6 @@ import com.wolfalone.gamecdbackend.repository.UserRepo;
 import com.wolfalone.gamecdbackend.service.AccountService;
 import com.wolfalone.gamecdbackend.service.EmailService;
 import com.wolfalone.gamecdbackend.service.iml.JwtService;
-import com.wolfalone.gamecdbackend.util.MyLogger;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,8 +39,7 @@ public class AuthenticatonController {
 
     @Autowired
     private EmailService emailService;
-    @Autowired
-    private MyLogger log;
+
     @Autowired
     private AccountService accountService;
 
@@ -82,7 +80,6 @@ public class AuthenticatonController {
         } catch (Exception e) {
             HttpHeaders headers = new HttpHeaders();
             headers.set("errorServer", "Some thing wrong");
-            log.log().error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(headers).body(null);
         }
 

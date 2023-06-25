@@ -13,7 +13,6 @@ import com.wolfalone.gamecdbackend.repository.AccountRepo;
 import com.wolfalone.gamecdbackend.repository.UserRepo;
 import com.wolfalone.gamecdbackend.service.AccountService;
 import com.wolfalone.gamecdbackend.service.EmailService;
-import com.wolfalone.gamecdbackend.util.MyLogger;
 import com.wolfalone.gamecdbackend.util.MyRamdom;
 import jakarta.transaction.Transactional;
 import org.apache.catalina.User;
@@ -53,8 +52,6 @@ public class AccountServiceIml implements AccountService {
     @Autowired
     private AccountRepo accountRepo;
 
-    @Autowired
-    private MyLogger myLogger;
 
     @Autowired
     private ApplicationEventPublisher publisher;
