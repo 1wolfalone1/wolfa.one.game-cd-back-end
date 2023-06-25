@@ -36,4 +36,4 @@
 
     - name: Run new container
       become: true
-      command: docker run -d -p 80:8080 --name game-cd "{{ docker_images }}"
+      command: docker run -d -p 80:3005 --name game-cd "{{ docker_images }}"
