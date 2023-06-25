@@ -37,7 +37,7 @@ jobs:
             run: |
                echo "${{ secrets.ENV }}" > ./src/main/resources/.env
                echo $(pwd)
-               echo "--------------------------------------test-------------------------------"
+               echo "---------------------------------test-----------------------------"
                echo $(ls -la "./src/main/resources/")
                echo $( "./src/main/resources/.env")
          -  name: Build with Maven
