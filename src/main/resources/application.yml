@@ -1,6 +1,6 @@
 ---
 server:
-  port: 3005
+  port: 8080
   tomcat:
     relaxed-query-chars: [ '[',']' ]
 spring:
