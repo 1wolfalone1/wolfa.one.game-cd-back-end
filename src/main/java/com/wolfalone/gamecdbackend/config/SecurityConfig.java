@@ -2,7 +2,6 @@ package com.wolfalone.gamecdbackend.config;
 
 
 import com.wolfalone.gamecdbackend.filter.JwtAuthenticationFilter;
-import com.wolfalone.gamecdbackend.model.Oauth2SuccessfulHandler;
 import com.wolfalone.gamecdbackend.service.iml.CustomOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,8 +38,8 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
     private AuthenticationProvider authenticationProvider;
-    @Autowired
-    private Oauth2SuccessfulHandler oauth2SuccessfulHandler;
+//    @Autowired
+//    private Oauth2SuccessfulHandler oauth2SuccessfulHandler;
     @Autowired
     private CustomOauth2UserService customOauth2UserServie;
 
