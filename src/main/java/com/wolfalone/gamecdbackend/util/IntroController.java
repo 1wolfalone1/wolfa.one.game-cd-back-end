@@ -10,6 +10,8 @@ public class IntroController {
 
     @GetMapping
     public String getIntro() {
-        return "Welcome to GameCD backend - the front-end domain now move to https://www.game-cd.store";
+        return "Welcome to GameCD backend 3:50 - the front-end domain now move to https://www" +
+                ".game-cd" +
+                ".store";
     }
 }
