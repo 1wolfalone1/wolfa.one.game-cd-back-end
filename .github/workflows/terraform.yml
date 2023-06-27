@@ -45,11 +45,11 @@ jobs:
       run:
         working-directory: terraform
     steps:
-      -  name: 'Create env file'
-            run: |
-               echo $(pwd)
-               echo $(ls -la "./")
-               echo $(ls -la '.terraform')
+      - name: 'Create env file'
+        run: |
+          echo $(pwd)
+          echo $(ls -la "./")
+          echo $(ls -la '.terraform')
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.2
         with:
