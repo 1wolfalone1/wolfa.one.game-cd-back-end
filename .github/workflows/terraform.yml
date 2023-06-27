@@ -39,13 +39,12 @@ jobs:
     # env:
     #  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORG }}
     steps:
-      - uses: actions/checkout@v3
-
-      - uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.2
-        id: upload
-        with:
-          workspace: "example-workspace"
-          directory: "./"
+      # - uses: actions/checkout@v3
+      # - uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.2
+      #   id: upload
+      #   with:
+      #     workspace: "example-workspace"
+      #     directory: "./"
 
       - uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.2
         id: create-run
