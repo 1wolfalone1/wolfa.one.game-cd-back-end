@@ -43,7 +43,7 @@ jobs:
       pull-requests: write
     defaults:
       run:
-        working-directory: terraform
+        working-directory: ./terraform
     steps:
       - name: 'Create env file'
         run: |
