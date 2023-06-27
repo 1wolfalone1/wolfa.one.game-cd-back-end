@@ -43,7 +43,7 @@ jobs:
       pull-requests: write
     defaults:
       run:
-        working-directory: ./ansible/
+        working-directory: ./terraform
     steps:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.2
