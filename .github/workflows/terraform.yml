@@ -28,7 +28,7 @@ env:
   TF_WORKSPACE: "example-workspace" ## Name of your existing workspace in Terraform Cloud.
   CONFIG_DIRECTORY: "./terraform" ## Directory of your Terraform Configuration. Relative to the project root.
   ## Additional env variables
-  # TF_LOG: DEBUG ## Helpful for troubleshooting
+  TF_LOG: DEBUG ## Helpful for troubleshooting
   # TF_MAX_TIMEOUT: "30m" ## If you wish to override the default "1h"
 
 jobs:
