@@ -47,11 +47,11 @@ jobs:
 
       - name: upload
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.2
-        id: upload
+        id: plan-upload
         with:
           workspace: "example-workspace"
           directory: "./terraform"
-
+          speculative: true
       # - name: create-run
       #   uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.2
       #   id: create-run
