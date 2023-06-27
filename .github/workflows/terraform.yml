@@ -48,6 +48,7 @@ jobs:
         run: |
           echo $(pwd)
           echo $(ls -la ./)
+          cd ..
           echo $(ls -la ./terraform)
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.2
