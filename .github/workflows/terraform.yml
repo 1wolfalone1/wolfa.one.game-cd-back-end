@@ -38,15 +38,22 @@ jobs:
     ## Example:
     # env:
     #  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORG }}
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
+      
       - uses: actions/checkout@v3
-      - uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.2
+
+      - name: upload
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.2
         id: upload
         with:
           workspace: "example-workspace"
-          directory: "./"
+          directory: "./terraform"
 
-      - uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.2
+      - name: create-run
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.2
         id: create-run
         with:
           workspace: "example-workspace"
