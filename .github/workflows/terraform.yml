@@ -41,9 +41,6 @@ jobs:
     permissions:
       id-token: write
       contents: write
-    defaults:
-      run:
-        working-directory: ./terraform/
     steps:
       - name: 'Create env file'
         run: |
