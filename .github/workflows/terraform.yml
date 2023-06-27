@@ -41,32 +41,29 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    defaults:
+      run:
+        working-directory: ./ansible/
     steps:
-      
-      - uses: actions/checkout@v3
-      - name: cd INDIRECT
-        run: |
-              echo $(pwd)
-              echo $(ls -a)
-              echo $(ls -a ./)
-              echo $(ls -a ./terraform)
-      - name: upload
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.2
-        id: plan-upload
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.2
         with:
-          workspace: "example-workspace"
-          directory: "./terraform"
-          speculative: true
-      # - name: create-run
-      #   uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.2
-      #   id: create-run
-      #   with:
-      #     workspace: "example-workspace"
-      #     configuration_version: ${{ steps.upload.outputs.configuration_version_id }}
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      # - uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.2
-      #   id: apply
-      #   if: ${{ fromJSON(steps.create-run.outputs.payload).data.attributes.actions.IsConfirmable }}
-      #   with:
-      #     run: ${{ steps.create-run.outputs.run_id }}
-      #     comment: "Apply Run from GitHub Actions CI ${{ github.sha }}"
+      - name: Terraform Init
+        id: init
+        run: |
+          terraform init
+
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'push'
+        run: terraform plan -no-color
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
