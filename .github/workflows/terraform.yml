@@ -5,74 +5,75 @@
 # **IF** the set paths contain files that have changed.
 #
 ---
-name: Terraform Cloud Apply Run
+  name: Terraform Cloud Apply Run
+  
+  on:
+    # push:
+    #   branches:
+    #   ## RECOMMENDED: Change for your target branch, or include branches you wish to trigger this workflow file.
+    #     - main
+    #   ## RECOMMENDED: Specify to only run this workflow file when terraform configuration has changed.
+    #   paths:
+    #     - <<INPUT REQUIRED>> ## Example: 'terraform/**.tf'
+    workflow_dispatch:
+  ## RECOMMENDED: Limit apply runs job / workflow to a single concurrency group at a time.
+  ## link: https://docs.github.com/en/actions/using-jobs/using-concurrency
+  ## Example:
+  # concurrency: production
+  
+  ## Add shared Environment Variables across jobs here ##
+  env:
+    TF_CLOUD_ORGANIZATION: "thientryhard" ## Name of your existing Terraform Cloud Organization. RECOMMENDED: use repository variables. ex. "${{ vars.TF_CLOUD_ORGANIZATION }}"
+    TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}" ## Terraform Cloud API Token. RECOMMENDED: replace with github action secrets. ex. "${{ secrets.TF_API_TOKEN }}"
+    TF_WORKSPACE: "example-workspace" ## Name of your existing workspace in Terraform Cloud.
+    ## Additional env variables
+    TF_LOG: DEBUG ## Helpful for troubleshooting
 
-on:
-  # push:
-  #   branches:
-  #   ## RECOMMENDED: Change for your target branch, or include branches you wish to trigger this workflow file.
-  #     - main
-  #   ## RECOMMENDED: Specify to only run this workflow file when terraform configuration has changed.
-  #   paths:
-  #     - <<INPUT REQUIRED>> ## Example: 'terraform/**.tf'
-  workflow_dispatch:
-## RECOMMENDED: Limit apply runs job / workflow to a single concurrency group at a time.
-## link: https://docs.github.com/en/actions/using-jobs/using-concurrency
-## Example:
-# concurrency: production
-
-## Add shared Environment Variables across jobs here ##
-env:
-  TF_CLOUD_ORGANIZATION: "thientryhard" ## Name of your existing Terraform Cloud Organization. RECOMMENDED: use repository variables. ex. "${{ vars.TF_CLOUD_ORGANIZATION }}"
-  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}" ## Terraform Cloud API Token. RECOMMENDED: replace with github action secrets. ex. "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: "example-workspace" ## Name of your existing workspace in Terraform Cloud.
-  ## Additional env variables
-  TF_LOG: DEBUG ## Helpful for troubleshooting
-  # TF_MAX_TIMEOUT: "30m" ## If you wish to override the default "1h"
-
-jobs:
-  terraform-cloud-apply-run:
-    runs-on: ubuntu-latest
-    ## OPTIONAL: can scope variables to this specific job
-    ## Example:
-    # env:
-    #  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORG }}
-    permissions:
-      id-token: write
-      contents: write
-    defaults:
-        run:
-          working-directory: .
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-      - name: 'Create env file'
-        run: |
-          echo $(pwd)
-          echo $(ls -la ./)
-          cd ..
-          echo $(ls -la ./)
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Build Docker image
-        run: |
-          cd terraform
-      - name: Terraform Init
-        id: init
-        run: |
-          terraform init
-
-      - name: Terraform Plan
-        id: plan
-        if: github.event_name == 'push'
-        run: terraform plan -no-color
-        continue-on-error: true
-
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+    # TF_MAX_TIMEOUT: "30m" ## If you wish to override the default "1h"
+  
+  jobs:
+    terraform-cloud-apply-run:
+      runs-on: ubuntu-latest
+      ## OPTIONAL: can scope variables to this specific job
+      ## Example:
+      # env:
+      #  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORG }}
+      permissions:
+        id-token: write
+        contents: write
+      defaults:
+          run:
+            working-directory: ./terraform/
+      steps:
+        - name: Checkout repo
+          uses: actions/checkout@v3
+        - name: 'Create env file'
+          run: |
+            echo $(pwd)
+            echo $(ls -la ./)
+            echo $(ls -la ./)
+            echo $(ls -la ./terraform)
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v2.0.2
+          with:
+            cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        - name: Build Docker image
+          run: |
+            cd terraform
+        - name: Terraform Init
+          id: init
+          run: |
+            terraform init
+  
+        - name: Terraform Plan
+          id: plan
+          if: github.event_name == 'push'
+          run: terraform plan -no-color
+          continue-on-error: true
+  
+        - name: Terraform Plan Status
+          if: steps.plan.outcome == 'failure'
+          run: exit 1
+  
+        - name: Terraform Apply
+          run: terraform apply -auto-approve
