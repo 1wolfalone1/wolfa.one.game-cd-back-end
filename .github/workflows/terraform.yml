@@ -42,7 +42,7 @@ jobs:
       contents: write
     defaults:
         run:
-          working-directory: terraform
+          working-directory: .
     steps:
       - name: 'Create env file'
         run: |
