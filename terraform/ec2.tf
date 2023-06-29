@@ -30,11 +30,11 @@ resource "aws_instance" "wolfalone" {
   }
   user_data     = <<-EOF
     #!/bin/bash
-    apt-get update -y
-    apt-get install -y docker.io
-    apt-get install -y awscli
-    systemctl start docker
-    systemctl enable docker
+    sudo apt-get update -y
+    sudo apt-get install -y docker.io
+    sudo apt-get install -y awscli
+    sudo systemctl start docker
+    sudo systemctl enable docker
   EOF
 }
 
