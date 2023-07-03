@@ -15,8 +15,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: ${env.DATABASE_USERNAME}
-    url: ${env.DATABASE_URL}
-    password: ${env.DATABASE_PASSWORD}
+    url: ${env.DATABASE_SERVER_URL}
+    password: ${env.DATABASE_SERVER_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
