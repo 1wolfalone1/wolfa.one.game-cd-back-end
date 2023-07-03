@@ -1,6 +1,7 @@
 package com.wolfalone.gamecdbackend.dto;
 
 
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 public record UserDTO(
@@ -13,6 +14,6 @@ public record UserDTO(
         String image
 ) {
 
-
+    @Builder public UserDTO {}
 
 }

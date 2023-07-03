@@ -45,3 +45,9 @@ spring:
 #            clientSecret: ${env.OAUTH2_GOOGLE_CLIENT_SECRET}
 #            redirectUri: "http://localhost:3005/oauth2/callback/google"
 #            scope: email,profile
+
+app:
+  aws:
+    accessKey: ${env.AWS_ACCESSKEY}
+    secretKey: ${env.AWS_SECRETKEY}
+    s3Url: ${env.S3_BASE_URL}
