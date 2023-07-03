@@ -28,6 +28,10 @@ public class Order {
     private Date orderDate;
     private int status;
 
+    private String address;
+    private String name;
+    private String phone;
+
     @ManyToOne
     @JoinColumn(
             name = "user_id"
