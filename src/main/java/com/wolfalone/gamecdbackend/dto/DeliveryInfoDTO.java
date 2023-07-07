@@ -8,8 +8,8 @@ import lombok.ToString;
 @Builder
 @ToString
 public class DeliveryInfoDTO {
-    public String name;
-    public String address;
-    public String phone;
+    private String name;
+    private String address;
+    private String phone;
 
 }

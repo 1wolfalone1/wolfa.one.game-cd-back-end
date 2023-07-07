@@ -20,6 +20,7 @@ public class OrderDetails {
 
     private int quantity;
 
+    private Long price;
     @ManyToOne
     @JoinColumn(
             name="order_id",

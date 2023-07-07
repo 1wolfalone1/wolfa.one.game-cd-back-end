@@ -17,8 +17,9 @@ public class OrderDTO {
 
     @Data
     @ToString
-    private static class GameDeliveryDTO {
-        public Long id;
-        public Long quantity;
+    public static class GameDeliveryDTO {
+        private int id;
+        private int quantity;
+        private Long price;
     }
 }

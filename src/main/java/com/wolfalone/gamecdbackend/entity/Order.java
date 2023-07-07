@@ -16,18 +16,19 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @CreationTimestamp
     private Date shipDate;
     @CreationTimestamp
     private Date orderDate;
     private int status;
 
+    private Long totalPayment;
     private String address;
     private String name;
     private String phone;

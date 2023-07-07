@@ -8,4 +8,6 @@ import org.springframework.stereotype.Service;
 public interface OrderService {
 
     ResponseEntity<?> orderGames(OrderDTO orderDTO);
+
+    ResponseEntity<?> getAllOrder();
 }
