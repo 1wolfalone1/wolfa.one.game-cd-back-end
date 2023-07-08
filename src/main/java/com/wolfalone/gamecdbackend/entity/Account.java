@@ -24,12 +24,12 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account  implements UserDetails {
+public class Account implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column( nullable = false)
+    @Column(nullable = false)
     private String email;
     @Column
     private String password;
@@ -47,27 +47,31 @@ public class Account  implements UserDetails {
 
     public String getRole() {
         String _role = "GUEST";
-        if(this.role == 1) {
+        System.out.println(this.role + "heteeeeeeeeeeeeeeee role");
+        if (this.role == 1) {
             _role = "ADMIN";
-        } else if(this.role == 0) {
+        } else if (this.role == 0) {
             _role = "USER";
         }
+        System.out.println(_role + "heteeeeeeeeeeeeeeee role");
+
         return _role;
     }
+
     @OneToOne(
             optional = false,
             cascade = CascadeType.ALL
     )
     @JoinColumn(
             name = "user_id",
-            referencedColumnName =  "id"
+            referencedColumnName = "id"
     )
     @JsonManagedReference
     private Users user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(this.getRole()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.getRole()));
     }
 
     @Override

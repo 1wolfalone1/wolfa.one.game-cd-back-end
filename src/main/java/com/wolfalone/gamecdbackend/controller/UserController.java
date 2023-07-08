@@ -19,7 +19,8 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<?> changeProfile(@RequestPart("data") UserInfoDto userInfoDto,
-                                           @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+                                           @RequestParam(value = "image", required = false)
+                                           MultipartFile image) throws IOException {
 
         return userService.changUserProfile(userInfoDto, image);
     }

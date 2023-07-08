@@ -25,4 +25,10 @@ public interface GameMapper {
     @Mapping(target = "price", source = "game.price")
     @Mapping(target = "quantity", source = "game.quantity")
     GameCardDTO toDTO(Game game, String image, List<CategoryDTO> listCate);
+
+    @Mapping(target = "id", source = "game.id")
+    @Mapping(target = "name", source = "game.name")
+    @Mapping(target = "price", source = "game.price")
+    @Mapping(target = "quantity", source = "game.quantity")
+    GameAdminTableDTO toAdminTableDTO(Game game);
 }

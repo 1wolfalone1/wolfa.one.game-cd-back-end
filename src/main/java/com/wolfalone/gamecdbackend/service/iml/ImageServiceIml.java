@@ -24,4 +24,5 @@ public class ImageServiceIml implements ImageService {
     public List<ImageDTO> mapListImageToListDTO(List<Image> images) {
         return images.stream().map(imageMapper::toDTO).collect(Collectors.toList());
     }
+
 }

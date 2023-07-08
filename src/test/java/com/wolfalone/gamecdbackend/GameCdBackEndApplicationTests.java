@@ -1,13 +1,13 @@
-//package com.wolfalone.gamecdbackend;
-//
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-//
-//@SpringBootTest
-//class GameCdBackEndApplicationTests {
-//
-//	@Test
-//	void contextLoads() {
-//	}
-//
-//}
+package com.wolfalone.gamecdbackend;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.testng.annotations.Test;
+
+@SpringBootTest
+class GameCdBackEndApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

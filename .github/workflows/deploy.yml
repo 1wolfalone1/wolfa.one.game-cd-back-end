@@ -19,7 +19,8 @@ jobs:
       steps:
          -  name: Checkout repo
             uses: actions/checkout@v3
-
+         -  name: Test coverage
+            uses: ArtiomTr/jest-coverage-report-action@v2
          -  name: cd TOWORKSPACE
             run: echo $(ls -a)
          -  uses: actions/checkout@v3

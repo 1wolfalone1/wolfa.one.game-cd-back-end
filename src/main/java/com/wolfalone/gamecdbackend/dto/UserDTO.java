@@ -11,7 +11,8 @@ public record UserDTO(
         String phone,
         String name,
         String token,
-        String image
+        String image,
+        String role
 ) {
 
     @Builder public UserDTO {}

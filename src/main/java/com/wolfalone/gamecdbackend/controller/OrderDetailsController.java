@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/order-details")
+@RequestMapping("/api/v1/")
 @Slf4j
 public class OrderDetailsController {
 
     @Autowired
     private OrderDetailsService orderDetailsService;
 
-    @GetMapping("/{orderId}")
+    @GetMapping("order-details/{orderId}")
     public ResponseEntity<?> getOrderDetails(@PathVariable int orderId) {
         return orderDetailsService.getOrderDetailsByOrderId(orderId);
     }

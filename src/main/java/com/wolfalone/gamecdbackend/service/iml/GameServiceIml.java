@@ -10,11 +10,13 @@ import com.wolfalone.gamecdbackend.service.GameService;
 import com.wolfalone.gamecdbackend.service.ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class GameServiceIml implements GameService {
 
 
@@ -38,8 +41,7 @@ public class GameServiceIml implements GameService {
 //        List<GameCardDTO> gameCardDTOList = gameMapper.toDTO(game)
         pageAble.getTotalPages();
         pageAble.getTotalElements();
-        List<GameCardDTO> gameCardDTOList =
-                mapListGameEntityToGameDTO(gameRepo.findAll(pageRequest).getContent());
+        List<GameCardDTO> gameCardDTOList = mapListGameEntityToGameDTO(gameRepo.findAll(pageRequest).getContent());
 
         ListGamePagingDTO list = new ListGamePagingDTO(pageAble.getTotalPages(), pageAble.getTotalElements(), gameCardDTOList);
         return ResponseEntity.ok(list);
@@ -55,16 +57,13 @@ public class GameServiceIml implements GameService {
             GameDetailsDTO gameDetailsDTO = gameMapper.toDetailsDTO(game, imageDTOList, categoryDTOList);
             return ResponseEntity.ok(gameDetailsDTO);
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Not have any game with " + "id:" + id);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not have any game with " + "id:" + id);
         }
     }
 
     @Override
     public ResponseEntity<?> filterGame(FilterDataDTO filterDataDTO, int page) {
-        PageRequest pageRequest = PageRequest.of(page - 1,
-                PagingConstant.PAGE_NUMBER);
+        PageRequest pageRequest = PageRequest.of(page - 1, PagingConstant.PAGE_NUMBER);
         Integer fromPrice = filterDataDTO.from();
         Integer toPrice = filterDataDTO.to();
         Integer categotyId = filterDataDTO.category();
@@ -75,22 +74,42 @@ public class GameServiceIml implements GameService {
         if (toPrice == null) {
             toPrice = Integer.MAX_VALUE;
         }
-        if(fromPrice == null) {
+        if (fromPrice == null) {
             fromPrice = 0;
         }
-        Page<Game> pageAble = gameRepo.filterByNameAndPriceRange(filterDataDTO.name(), fromPrice, toPrice,
-                hasCategoryId, categotyId, pageRequest);
+        Page<Game> pageAble = gameRepo.filterByNameAndPriceRange(filterDataDTO.name(), fromPrice, toPrice, hasCategoryId, categotyId, pageRequest);
         List<Game> games = pageAble.getContent();
 
         int totalPage = pageAble.getTotalPages();
         long totalElement = pageAble.getTotalElements();
-        System.out.println(games +  "--[]--");
-        System.out.println(totalPage +  "--[]--");
-        System.out.println(totalElement +  "--[]--");
+        System.out.println(games + "--[]--");
+        System.out.println(totalPage + "--[]--");
+        System.out.println(totalElement + "--[]--");
         List<GameCardDTO> gameCardDTOList = mapListGameEntityToGameDTO(games);
-        ListGamePagingDTO listGamePagingDTO = new ListGamePagingDTO(totalPage
-                , totalElement, gameCardDTOList);
+        ListGamePagingDTO listGamePagingDTO = new ListGamePagingDTO(totalPage, totalElement, gameCardDTOList);
         return ResponseEntity.ok(listGamePagingDTO);
+    }
+
+    @Override
+    public ResponseEntity<?> getGameAdminAndPaging(Integer page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1, PagingConstant.PAGE_NUMBER);
+            Page<Game> pageAble = gameRepo.findAll(pageRequest);
+            List<GameAdminTableDTO> list = mapListGameEntityToGameAdminTableDTO(gameRepo.findAll(pageRequest).getContent());
+            PageAdminTableDTO gameAdminTableDTO = PageAdminTableDTO.builder().list(list).totalProduct(pageAble.getTotalElements()).totalPage(pageAble.getTotalPages()).build();
+            return ResponseEntity.ok(gameAdminTableDTO);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Some thing went wrong ");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> createGame(CreateGameDTO createGameDTO, List<MultipartFile> images) {
+        log.info("images {}", images);
+        log.info("ceateGameDTO {}", createGameDTO.toString());
+        return null;
     }
 
     public List<GameCardDTO> mapListGameEntityToGameDTO(List<Game> games) {
@@ -100,4 +119,9 @@ public class GameServiceIml implements GameService {
         }).collect(Collectors.toList());
     }
 
+    public List<GameAdminTableDTO> mapListGameEntityToGameAdminTableDTO(List<Game> games) {
+        return games.stream().map(game -> {
+            return gameMapper.toAdminTableDTO(game);
+        }).collect(Collectors.toList());
+    }
 }

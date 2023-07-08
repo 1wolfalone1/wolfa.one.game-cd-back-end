@@ -6,6 +6,7 @@ import com.wolfalone.gamecdbackend.service.iml.CustomOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,6 +23,26 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
+
+    private static  final String[] WHITE_LIST_URLS = {
+            "/api/v1/authentication/**",
+            "/auth/**",
+            "/oauth/**",
+            "/oauth2",
+            "/login",
+            "/api/v1/games/**",
+            "/api/v1/category/**",
+            "/api/v1/category",
+            "/"
+    };
+
+    private static  final String[] WHITE_LIST_USER_URLS = {
+            "/api/v1/order/**",
+            "/api/v1/order-details/**"
+    };
+    private static  final String[] WHITE_LIST_ADMIN_URLS = {
+            "/api/v1/admin/**",
+    };
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -47,14 +68,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors().and().csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/v1/authentication/**",
-                        "/auth/**", "/oauth/**", "/oauth2" +
-                        "/**", "/login", "/api/v1/games/**", "/api/v1/category/**", "/api/v1" +
-                                "/category", "/").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
+                .authorizeHttpRequests(
+                    auth ->auth
+                            .requestMatchers(WHITE_LIST_URLS)
+                            .permitAll()
+                            .requestMatchers(WHITE_LIST_USER_URLS).hasAnyRole("USER", "ADMIN")
+                            .requestMatchers( WHITE_LIST_ADMIN_URLS).hasAnyRole("ADMIN")
+                            .anyRequest()
+                            .authenticated()
+                )
 //                .oauth2Login()
 //                .userInfoEndpoint()
 //                .userService(customOauth2UserServie)

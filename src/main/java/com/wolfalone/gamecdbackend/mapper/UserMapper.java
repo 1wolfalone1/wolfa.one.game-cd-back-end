@@ -17,5 +17,6 @@ public interface UserMapper {
     @Mapping(target = "name", source = "user.fullName")
     @Mapping(target = "token", source = "accounttttt.tokenId")
     @Mapping(target = "image", source = "accounttttt.avatarPath")
+    @Mapping(target = "role", source = "accounttttt.role")
     UserDTO toDTO(Users user, Account accounttttt);
 }
