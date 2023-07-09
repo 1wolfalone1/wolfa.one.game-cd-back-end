@@ -22,11 +22,6 @@ public class Category {
     private int id;
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "tbl_category_game",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "game_id")
-    )
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL)
     private List<Game> games = new ArrayList<>();
 }

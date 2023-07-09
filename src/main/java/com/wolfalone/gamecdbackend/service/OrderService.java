@@ -10,4 +10,8 @@ public interface OrderService {
     ResponseEntity<?> orderGames(OrderDTO orderDTO);
 
     ResponseEntity<?> getAllOrder();
+
+    ResponseEntity<?> getAdminOrderTableDTO(int page);
+
+    ResponseEntity<?> changeStatusOrder(int id);
 }

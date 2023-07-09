@@ -23,16 +23,26 @@ public interface GameRepo extends JpaRepository<Game, Integer> {
 //            nativeQuery = true)
 //    Page<Game> filterByNameAndPriceRange(String name, int fromPrice, int toPrice,
 //                                         int hasCategoryId, int categoryId, Pageable pageable);
-    @Query(value = "select g.id, g.description, g.\"name\", g.price, g.quantity from tbl_game g " +
+    @Query(value = "select g.id, g.description, g.\"name\", g.price, g.quantity, g.is_deleted " +
+            "from " +
+            "tbl_game " +
+            "g " +
             "join tbl_category_game cg on g.id = cg.game_id WHERE g.name LIKE %?1% AND g.price " +
-            "BETWEEN ?2 AND ?3 and (0 = ?4 or cg.category_id = ?5) group by g.id, g.description, g.name, g.price, g.quantity",
+            "BETWEEN ?2 AND ?3 and (0 = ?4 or cg.category_id = ?5) and g.is_deleted = false group by g.id, g.description," +
+            " " +
+            "g.name, g.price, g.quantity , g.is_deleted",
             countQuery = "select count(g.id) from tbl_game g join tbl_category_game cg on g.id = " +
                     "cg" +
                     ".game_id WHERE g.name LIKE %?1% AND g.price BETWEEN ?2 AND ?3 and (0 = ?4" +
                     " " +
-                    " or cg.category_id = ?5) group by g.id, g.description, g.name, g.price, g.quantity",
+                    " or cg.category_id = ?5) and g.is_deleted = false group by g.id, g" +
+                    ".description, g.name," +
+                    " g.price, " +
+                    "g" +
+                    ".quantity , g.is_deleted",
             nativeQuery = true)
     Page<Game> filterByNameAndPriceRange(String name, int fromPrice, int toPrice,
                                          int hasCategoryId, int categoryId, Pageable pageable);
 
+    Page<Game> findAllByIsDeletedFalse(Pageable pageable);
 }

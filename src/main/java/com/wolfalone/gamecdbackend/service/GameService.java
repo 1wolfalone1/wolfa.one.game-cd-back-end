@@ -1,9 +1,6 @@
 package com.wolfalone.gamecdbackend.service;
 
-import com.wolfalone.gamecdbackend.dto.CreateGameDTO;
-import com.wolfalone.gamecdbackend.dto.FilterDataDTO;
-import com.wolfalone.gamecdbackend.dto.GameDetailsDTO;
-import com.wolfalone.gamecdbackend.dto.ListGamePagingDTO;
+import com.wolfalone.gamecdbackend.dto.*;
 import com.wolfalone.gamecdbackend.entity.Game;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,5 +16,11 @@ public interface GameService {
 
     ResponseEntity<?> getGameAdminAndPaging(Integer page);
 
-    ResponseEntity<?> createGame(CreateGameDTO createGameDTO, List<MultipartFile> images);
+    ResponseEntity<?> createGame(CreateGameDTO createGameDTO, List<MultipartFile> images) throws Exception;
+
+    ResponseEntity<?> deleteGame(int id);
+
+    ResponseEntity<?> getGameForAdminUpdate(int id);
+
+    ResponseEntity<?> updateGame(List<MultipartFile> images, GameDataUpdateDTO gameDataUpdateDTO);
 }

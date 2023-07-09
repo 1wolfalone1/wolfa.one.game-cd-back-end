@@ -1,6 +1,8 @@
 package com.wolfalone.gamecdbackend.service.iml;
 
 import com.wolfalone.gamecdbackend.config.constant.StatusOrder;
+import com.wolfalone.gamecdbackend.dto.AdminOrderTableDTO;
+import com.wolfalone.gamecdbackend.dto.AdminOrderTablePageDTO;
 import com.wolfalone.gamecdbackend.dto.OrderDTO;
 import com.wolfalone.gamecdbackend.dto.OrderTableDTO;
 import com.wolfalone.gamecdbackend.entity.Game;
@@ -17,6 +19,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -96,6 +101,52 @@ public class OrderServiceIml implements OrderService {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad requestt");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getAdminOrderTableDTO(int page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1
+                    , 8
+                    , Sort.by(Sort.Direction.DESC
+                            , "orderDate"
+                            , "shipDate")
+            );
+
+            Page<Order> pageAble = orderRepo.findAll(pageRequest);
+            List<AdminOrderTableDTO> adminOrderTableDTO = orderMapper.toListAdminOrderTableDTO(
+                    pageAble.getContent()
+            );
+
+            AdminOrderTablePageDTO adminOrderTablePageDTO = AdminOrderTablePageDTO
+                    .builder()
+                    .totalElement(pageAble.getTotalElements())
+                    .data(adminOrderTableDTO)
+                    .build();
+
+            return ResponseEntity.ok(adminOrderTablePageDTO);
+        } catch (Exception e) {
+            log.info("Erorr {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erorr get admin table " +
+                    "orderr data");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> changeStatusOrder(int id) {
+        try {
+            Order order = orderRepo.findById(id).get();
+            order.setStatus(1);
+            orderRepo.save(order);
+            return ResponseEntity
+                    .ok("ok");
+        } catch (Exception e) {
+            log.error("Error {}", e);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Error change status");
         }
     }
 }

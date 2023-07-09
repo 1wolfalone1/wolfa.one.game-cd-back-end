@@ -68,12 +68,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors().and().csrf().disable()
+
                 .authorizeHttpRequests(
                     auth ->auth
                             .requestMatchers(WHITE_LIST_URLS)
                             .permitAll()
-                            .requestMatchers(WHITE_LIST_USER_URLS).hasAnyRole("USER", "ADMIN")
-                            .requestMatchers( WHITE_LIST_ADMIN_URLS).hasAnyRole("ADMIN")
+                            .requestMatchers(WHITE_LIST_USER_URLS)
+                            .hasAnyRole("USER", "ADMIN")
+                            .requestMatchers( WHITE_LIST_ADMIN_URLS)
+                            .hasAnyRole("ADMIN")
+
                             .anyRequest()
                             .authenticated()
                 )
@@ -90,7 +94,6 @@ public class SecurityConfig {
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
-        ;
         return http.build();
     }
 }

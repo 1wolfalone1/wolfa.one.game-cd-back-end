@@ -2,10 +2,7 @@ package com.wolfalone.gamecdbackend.controller;
 
 
 import com.wolfalone.gamecdbackend.config.constant.ApiConstant;
-import com.wolfalone.gamecdbackend.dto.CreateGameDTO;
-import com.wolfalone.gamecdbackend.dto.FilterDataDTO;
-import com.wolfalone.gamecdbackend.dto.ListGamePagingDTO;
-import com.wolfalone.gamecdbackend.dto.UserInfoDto;
+import com.wolfalone.gamecdbackend.dto.*;
 import com.wolfalone.gamecdbackend.entity.Game;
 import com.wolfalone.gamecdbackend.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +35,31 @@ public class GameController {
         System.out.println(filterData + " - " + page);
         return gameService.filterGame(filterData, page);
     }
+
     @GetMapping("admin/games/{page}")
     public ResponseEntity<?> getGamesAdmin(@PathVariable("page") Integer page) {
         return gameService.getGameAdminAndPaging(page);
     }
 
     @PostMapping("admin/games")
-    public ResponseEntity<?> createNewGame(@RequestPart("data") CreateGameDTO createGameDTO,
-                                           @RequestParam(value = "image", required = false)
-                                           List<MultipartFile> images){
+    public ResponseEntity<?> createNewGame(@RequestPart("data") CreateGameDTO createGameDTO, @RequestParam(value = "image", required = false) List<MultipartFile> images) throws Exception {
         return gameService.createGame(createGameDTO, images);
+    }
+
+    @DeleteMapping("admin/games/{id}")
+    public ResponseEntity<?> deleteGame(@PathVariable("id") int id) {
+        return gameService.deleteGame(id);
+    }
+
+    @GetMapping("admin/games/details/{id}")
+    public ResponseEntity<?> getGameForUpdate(@PathVariable("id") int id) {
+        return gameService.getGameForAdminUpdate(id);
+    }
+
+    @PutMapping("admin/games")
+    public ResponseEntity<?> updateGame(
+            @RequestParam(value = "images", required = false) List<MultipartFile> images
+            , @RequestPart("data") GameDataUpdateDTO gameDataUpdateDTO) {
+        return gameService.updateGame(images, gameDataUpdateDTO);
     }
 }

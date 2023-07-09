@@ -24,4 +24,14 @@ public class OrderController {
     public ResponseEntity<?> getOrder() {
         return orderService.getAllOrder();
     }
+
+    @GetMapping("admin/order/{page}")
+    public ResponseEntity<?> getAdminOrderTableDTO(@PathVariable("page") int page){
+        return orderService.getAdminOrderTableDTO(page);
+    }
+
+    @PutMapping("admin/order/status/{id}")
+    public ResponseEntity<?> changeStatusOrder(@PathVariable("id") int id) {
+        return orderService.changeStatusOrder(id);
+    }
 }

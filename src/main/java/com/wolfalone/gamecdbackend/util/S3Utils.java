@@ -14,10 +14,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.core.waiters.WaiterResponse;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
-import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.waiters.S3Waiter;
 
 import java.io.IOException;
@@ -102,4 +99,26 @@ public class S3Utils {
                     x.contentType(), x.toString());
         });
     }
+//    public static void deleteFile(String fileName)
+//            throws AwsServiceException, SdkClientException {
+//        S3Client client = S3Client.builder()
+//                .region(Region.AP_SOUTHEAST_1)
+//                .credentialsProvider(() -> new AwsCredentials() {
+//                    @Override
+//                    public String accessKeyId() {
+//                        return appProperties.getAws().getAccessKey();
+//                    }
+//
+//                    @Override
+//                    public String secretAccessKey() {
+//                        return appProperties.getAws().getSecretKey();
+//                    }
+//                })
+//                .build();
+//
+//        client.deleteObject(DeleteObjectRequest.builder()
+//                .bucket(BUCKET)
+//                .key(fileName)
+//                .build());
+//    }
 }
